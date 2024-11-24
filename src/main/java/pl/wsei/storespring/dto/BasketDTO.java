@@ -1,11 +1,7 @@
 package pl.wsei.storespring.dto;
 
-import lombok.Getter;
-import lombok.Setter;
 import pl.wsei.storespring.model.Basket;
 
-@Getter
-@Setter
 public class BasketDTO {
 	
 	long id;
@@ -24,5 +20,21 @@ public class BasketDTO {
 		basket.setId(basketDTO.id);
 		basket.setItem(basketDTO.item);
 		return basket;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public String getItem() {
+		return item;
+	}
+
+	public void setItem(String item) {
+		this.item = item;
 	}
 }

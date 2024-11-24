@@ -1,6 +1,5 @@
 package pl.wsei.storespring.service;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.wsei.storespring.dto.BasketDTO;
@@ -11,7 +10,6 @@ import pl.wsei.storespring.repository.BasketRepository;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class BasketService {
 
 	private BasketRepository basketRepository;

@@ -1,10 +1,5 @@
 package pl.wsei.storespring.exception;
 
-import lombok.Getter;
-import lombok.Setter;
-
-@Setter
-@Getter
 public class ErrorResponse {
 
 	private String message;
@@ -17,4 +12,27 @@ public class ErrorResponse {
 		this.timestamp = System.currentTimeMillis();
 	}
 
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
+
+	public long getTimestamp() {
+		return timestamp;
+	}
+
+	public void setTimestamp(long timestamp) {
+		this.timestamp = timestamp;
+	}
 }
