@@ -25,3 +25,13 @@
     - Dodaj nowy endpoint REST do pobrania wartości koszyka.
     - Upewnij się, że logika biznesowa znajduje się w klasach serwisowych.
     - Pamiętaj o obsłudze wyjątków.
+
+## Zadanie 4: Dodanie funkcjonalności "Akcja promocyjna"
+
+- **Opis:** Dodaj funkcjonalność "Akcja promocyjna", która umożliwi wprowadzenie wartości procentowej promocji dla koszyka. Zrealizuj endpoint REST, który pozwoli na ustawienie procentowej wartości promocji. Jeśli promocja jest ustawiona, jej wartość powinna być uwzględniana przy obliczaniu całkowitej wartości koszyka. W przypadku braku promocji, wartość koszyka powinna pozostać bez zmian.
+- **Wskazówki:**
+  - Utwórz nową encję, np. `Promotion`, która będzie przechowywała wartość procentową promocji.
+  - Dodaj odpowiednie repozytorium do zarządzania promocjami.
+  - Zaimplementuj logikę biznesową w klasach serwisowych, która będzie odpowiedzialna za uwzględnianie promocji w wartości koszyka.
+  - Dodaj odpowiedni model DTO do przekazywania danych między warstwami.
+  - Utwórz endpoint REST w kontrolerze do ustawiania promocji.
