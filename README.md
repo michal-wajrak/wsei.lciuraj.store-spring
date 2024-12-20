@@ -35,3 +35,31 @@
   - Zaimplementuj logikę biznesową w klasach serwisowych, która będzie odpowiedzialna za uwzględnianie promocji w wartości koszyka.
   - Dodaj odpowiedni model DTO do przekazywania danych między warstwami.
   - Utwórz endpoint REST w kontrolerze do ustawiania promocji.
+
+## Zadanie 5: Dodanie obiektu `User` jako właściciela koszyka
+
+- **Opis:** Utwórz klasę encji `User`, która będzie reprezentować właściciela koszyka `Basket`. Klasa powinna zawierać pola takie jak `id`, `name`, `surname`, `login`, `email`. Dodaj odpowiednie repozytorium, serwis oraz klasy DTO, aby umożliwić wykorzystanie obiektu `User` w aplikacji. Zrealizuj funkcjonalność REST API z metodami umożliwiającymi dodawanie, usuwanie, modyfikowanie oraz pobieranie użytkowników, zarówno pojedynczych, jak i w formie listy. Relacja między `User` a `Basket` powinna być relacją jeden-do-jeden, co oznacza, że każdy koszyk jest przypisany do konkretnego użytkownika.
+- **Wskazówki:**
+  - Skonfiguruj relację między `User` a `Basket` w klasie encji.
+  - Upewnij się, że logika biznesowa znajduje się w warstwie serwisu.
+  - Zaimplementuj pełne wsparcie dla operacji CRUD w kontrolerze REST.
+  - Dodaj obsługę wyjątków, np. w przypadku prób pobrania użytkownika o nieistniejącym `id`.
+
+## Zadanie 6: Dodanie walidacji dla obiektu `User`
+
+- **Opis:** Dodaj walidację pól w obiekcie `User`, aby zapewnić poprawność danych przekazywanych w ramach aplikacji. Walidacja powinna obejmować pięć różnych reguł na polach obiektu. Upewnij się, że wszystkie walidacje są uwzględniane podczas operacji tworzenia oraz modyfikowania użytkownika w REST API.
+- **Wymagania:**
+  - Dla pola `name`:
+    - **Reguła:** Imię użytkownika nie może być puste.
+  - Dla pola `surname`:
+    - **Reguła:** Nazwisko użytkownika musi mieć co najmniej 2 znaki.
+  - Dla pola `login`:
+    - **Reguła:** Login użytkownika powinien być unikalny oraz zawierać tylko litery i cyfry.
+  - Dla pola `email`:
+    - **Reguła:** Adres e-mail powinien być w poprawnym formacie (np. `example@example.com`).
+  - Dla pola `id`:
+    - **Reguła:** Identyfikator użytkownika nie może być modyfikowany po jego utworzeniu.
+- **Wskazówki:**
+  - Skorzystaj z adnotacji walidacyjnych takich jak `@NotBlank`, `@Size`, `@Pattern`, `@Email`, `@Immutable` (lub podobnych) na obiekcie DTO.
+  - Dodaj obsługę błędów walidacyjnych kontrolerze REST z użyciem we właściwym miejscu adnotacji `@Valid`. Wykorzystaj istniejący już `@ExceptionHandler` (klasa wyjątku to: `MethodArgumentNotValidException.class`).
+  - W przypadku unikalności loginu, weryfikuj istniejące wartości w bazie danych w warstwie serwisowej.
