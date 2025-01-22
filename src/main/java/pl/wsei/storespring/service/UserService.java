@@ -1,6 +1,7 @@
 package pl.wsei.storespring.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import pl.wsei.storespring.dto.BaseUserDTO;
 import pl.wsei.storespring.dto.UserDTO;
@@ -31,6 +32,10 @@ public class UserService {
     }
 
     public UserDTO createUser(BaseUserDTO baseUserDTO) {
+        if (userRepository.existsByLogin((baseUserDTO.getLogin()))) {
+            throw new DataIntegrityViolationException("Login must be unique");
+        }
+
         User user = baseUserDTO.toEntity();
         user = userRepository.save(user);
         return UserDTO.fromEntity(user);
@@ -38,7 +43,7 @@ public class UserService {
 
     public UserDTO updateUser(Long id, BaseUserDTO baseUserDTO) {
         User user = userRepository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         if (baseUserDTO.getName() != null) {
             user.setName(baseUserDTO.getName());
@@ -48,7 +53,11 @@ public class UserService {
             user.setSurname(baseUserDTO.getSurname());
         }
 
-        if (baseUserDTO.getLogin() != null) {
+        if (baseUserDTO.getLogin() != null && !baseUserDTO.getLogin().equals(user.getLogin())) {
+            if (userRepository.existsByLogin(baseUserDTO.getLogin())) {
+                throw new DataIntegrityViolationException("Login must be unique");
+            }
+
             user.setLogin(baseUserDTO.getLogin());
         }
 
