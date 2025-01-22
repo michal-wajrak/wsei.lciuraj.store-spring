@@ -6,7 +6,9 @@ import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import pl.wsei.storespring.dto.BasketDTO;
+import pl.wsei.storespring.dto.PromotionDTO;
 import pl.wsei.storespring.model.Basket;
+import pl.wsei.storespring.model.Promotion;
 import pl.wsei.storespring.service.BasketService;
 
 import java.math.BigDecimal;
@@ -64,5 +66,12 @@ public class BasketController {
 	public ResponseEntity<BigDecimal> getBasketValue(@PathVariable Long id) {
 		BigDecimal totalValue = basketService.calculateBasketValue(id);
 		return ResponseEntity.ok(totalValue);
+	}
+
+	@Operation(summary = "Set promotion to basket")
+	@PostMapping("/basket/{id}/promotion")
+	public ResponseEntity<PromotionDTO> createPromotion(@PathVariable Long id, @RequestBody Integer discountPercentage) {
+		PromotionDTO createdPromotion = basketService.setPromotion(id, discountPercentage);
+		return ResponseEntity.status(201).body(createdPromotion);
 	}
 }
