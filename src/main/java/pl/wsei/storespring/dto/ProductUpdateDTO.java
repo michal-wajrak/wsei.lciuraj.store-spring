@@ -1,9 +1,8 @@
 package pl.wsei.storespring.dto;
 
-public class CreateProductDTO {
+public class ProductUpdateDTO {
     private String name;
     private Integer quantity;
-    private Long basketId;
 
     public String getName() {
         return name;
@@ -19,13 +18,5 @@ public class CreateProductDTO {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
-    }
-
-    public Long getBasketId() {
-        return basketId;
-    }
-
-    public void setBasketId(Long basketId) {
-        this.basketId = basketId;
     }
 }
