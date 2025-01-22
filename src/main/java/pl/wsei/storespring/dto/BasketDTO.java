@@ -2,23 +2,25 @@ package pl.wsei.storespring.dto;
 
 import pl.wsei.storespring.model.Basket;
 
+import java.util.List;
+
 public class BasketDTO {
 	
 	long id;
-	
-	String item;
+	private List<ProductWithoutBasketDTO> products;
 
 	public static BasketDTO fromEntity(Basket basket) {
 		BasketDTO basketDTO = new BasketDTO();
 		basketDTO.id = basket.getId();
-		basketDTO.item = basket.getItem();
+		basketDTO.products = basket.getProducts().stream()
+				.map(ProductWithoutBasketDTO::fromEntity)
+				.toList();
 		return basketDTO;
 	}
 
 	public static Basket toEntity(BasketDTO basketDTO) {
 		Basket basket = new Basket();
 		basket.setId(basketDTO.id);
-		basket.setItem(basketDTO.item);
 		return basket;
 	}
 
@@ -30,11 +32,11 @@ public class BasketDTO {
 		this.id = id;
 	}
 
-	public String getItem() {
-		return item;
+	public List<ProductWithoutBasketDTO> getProducts() {
+		return products;
 	}
 
-	public void setItem(String item) {
-		this.item = item;
+	public void setProducts(List<ProductWithoutBasketDTO> products) {
+		this.products = products;
 	}
 }

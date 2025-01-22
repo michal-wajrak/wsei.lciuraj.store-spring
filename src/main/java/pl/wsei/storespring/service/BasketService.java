@@ -5,23 +5,28 @@ import org.springframework.stereotype.Service;
 import pl.wsei.storespring.dto.BasketDTO;
 import pl.wsei.storespring.exception.ResourceNotFoundException;
 import pl.wsei.storespring.model.Basket;
+import pl.wsei.storespring.model.Product;
 import pl.wsei.storespring.repository.BasketRepository;
+import pl.wsei.storespring.repository.ProductRepository;
 
 import java.util.List;
 
 @Service
 public class BasketService {
 
-	private BasketRepository basketRepository;
+	private final BasketRepository basketRepository;
+	private final ProductRepository productRepository;
 
 	@Autowired
-	public BasketService(BasketRepository basketRepository) {
+	public BasketService(BasketRepository basketRepository, ProductRepository productRepository) {
 		this.basketRepository = basketRepository;
+		this.productRepository = productRepository;
 	}
 
-	public Basket createBasket(BasketDTO basketDto) {
-		Basket basket = BasketDTO.toEntity(basketDto);
-		return basketRepository.save(basket);
+	public BasketDTO createBasket() {
+		 Basket createdBasket = basketRepository.save(new Basket());
+
+		 return BasketDTO.fromEntity(createdBasket);
 	}
 
 	public BasketDTO getBasketById(Long id) {
@@ -33,11 +38,19 @@ public class BasketService {
 		return basketRepository.findAll().stream().map(BasketDTO::fromEntity).toList();
 	}
 
-	public Basket updateBasket(Long id, BasketDTO basketDetails) {
+	public BasketDTO updateBasket(Long id, List<Long> productIds) {
 		Basket basket = basketRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Basket not found"));
-		basket.setItem(basketDetails.getItem());
-		return basketRepository.save(basket);
+
+		List<Product> products = productRepository.findAllById(productIds);
+
+		if (products.size() != productIds.size()) {
+			throw new ResourceNotFoundException("One or more products not found");
+		}
+
+		basket.setProducts(products);
+
+		return BasketDTO.fromEntity(basketRepository.save(basket));
 	}
 
 	public void deleteBasket(Long id) {

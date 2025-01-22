@@ -39,15 +39,15 @@ public class BasketController {
 
 	@Operation(summary = "Create a new basket")
 	@PostMapping("/basket")
-	public ResponseEntity<Basket> createBasket(@RequestBody BasketDTO basket) {
-		Basket createdBasket = basketService.createBasket(basket);
+	public ResponseEntity<BasketDTO> createBasket() {
+		BasketDTO createdBasket = basketService.createBasket();
 		return ResponseEntity.status(201).body(createdBasket);
 	}
 
 	@Operation(summary = "Update an existing basket")
 	@PutMapping("/basket/{id}")
-	public ResponseEntity<Basket> updateBasket(@PathVariable Long id, @RequestBody BasketDTO basket) {
-		Basket updatedBasket = basketService.updateBasket(id, basket);
+	public ResponseEntity<BasketDTO> updateBasket(@PathVariable Long id, @RequestBody List<Long> productIds) {
+		BasketDTO updatedBasket = basketService.updateBasket(id, productIds);
 		return ResponseEntity.ok(updatedBasket);
 	}
 
