@@ -43,6 +43,7 @@ public class ProductService {
 		Product product = new Product();
 		product.setName(createProductDTO.getName());
 		product.setQuantity(createProductDTO.getQuantity());
+		product.setPrice(createProductDTO.getPrice());
 		product.setBasket(basket);
 
 		Product savedProduct = productRepository.save(product);
@@ -56,6 +57,7 @@ public class ProductService {
 
 		product.setName(productUpdateDTO.getName());
 		product.setQuantity(productUpdateDTO.getQuantity());
+		product.setPrice(productUpdateDTO.getPrice());
 
 		return ProductDTO.fromEntity(productRepository.save(product));
 	}

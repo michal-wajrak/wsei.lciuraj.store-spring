@@ -1,9 +1,12 @@
 package pl.wsei.storespring.dto;
 
+import java.math.BigDecimal;
+
 public class CreateProductDTO {
     private String name;
     private Integer quantity;
     private Long basketId;
+    private BigDecimal price;
 
     public String getName() {
         return name;
@@ -27,5 +30,13 @@ public class CreateProductDTO {
 
     public void setBasketId(Long basketId) {
         this.basketId = basketId;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 }

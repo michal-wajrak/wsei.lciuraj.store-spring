@@ -3,6 +3,8 @@ package pl.wsei.storespring.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(name = "product")
 public class Product {
@@ -15,7 +17,9 @@ public class Product {
     private String name;
 
     @Column(name = "quantity", nullable = false)
-    private int quantity;
+    private Integer quantity;
+
+    private BigDecimal price;
 
     @ManyToOne
     @JoinColumn(name = "basketId", nullable = false)
@@ -51,5 +55,13 @@ public class Product {
 
     public void setBasket(Basket basket) {
         this.basket = basket;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 }

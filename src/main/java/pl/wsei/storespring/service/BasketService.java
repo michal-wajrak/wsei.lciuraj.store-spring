@@ -9,6 +9,7 @@ import pl.wsei.storespring.model.Product;
 import pl.wsei.storespring.repository.BasketRepository;
 import pl.wsei.storespring.repository.ProductRepository;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -57,5 +58,14 @@ public class BasketService {
 		Basket basket = basketRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Basket not found"));
 		basketRepository.delete(basket);
+	}
+
+	public BigDecimal calculateBasketValue(Long basketId) {
+		Basket basket = basketRepository.findById(basketId)
+				.orElseThrow(() -> new RuntimeException("Basket not found"));
+
+		return basket.getProducts().stream()
+				.map(product -> product.getPrice().multiply(BigDecimal.valueOf(product.getQuantity())))
+				.reduce(BigDecimal.ZERO, BigDecimal::add);
 	}
 }
