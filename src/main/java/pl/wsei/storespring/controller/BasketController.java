@@ -1,5 +1,6 @@
 package pl.wsei.storespring.controller;
 
+import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -42,8 +43,10 @@ public class BasketController {
 
 	@Operation(summary = "Create a new basket")
 	@PostMapping("/basket")
-	public ResponseEntity<BasketDTO> createBasket() {
-		BasketDTO createdBasket = basketService.createBasket();
+	public ResponseEntity<BasketDTO> createBasket(
+			@Parameter(description = "User ID", required = true)
+			@RequestBody Long userId) {
+		BasketDTO createdBasket = basketService.createBasket(userId);
 		return ResponseEntity.status(201).body(createdBasket);
 	}
 

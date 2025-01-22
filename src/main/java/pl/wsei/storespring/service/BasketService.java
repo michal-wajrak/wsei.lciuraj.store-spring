@@ -4,16 +4,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.wsei.storespring.dto.BasketDTO;
 import pl.wsei.storespring.dto.PromotionDTO;
+import pl.wsei.storespring.dto.UserDTO;
 import pl.wsei.storespring.exception.ResourceNotFoundException;
 import pl.wsei.storespring.model.Basket;
 import pl.wsei.storespring.model.Product;
 import pl.wsei.storespring.model.Promotion;
+import pl.wsei.storespring.model.User;
 import pl.wsei.storespring.repository.BasketRepository;
 import pl.wsei.storespring.repository.ProductRepository;
 import pl.wsei.storespring.repository.PromotionRepository;
+import pl.wsei.storespring.repository.UserRepository;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BasketService {
@@ -21,23 +25,39 @@ public class BasketService {
 	private final BasketRepository basketRepository;
 	private final ProductRepository productRepository;
 	private final PromotionRepository promotionRepository;
+	private final UserRepository userRepository;
 
 	@Autowired
-	public BasketService(BasketRepository basketRepository, ProductRepository productRepository, PromotionRepository promotionRepository) {
+	public BasketService(BasketRepository basketRepository,
+						 ProductRepository productRepository,
+						 PromotionRepository promotionRepository,
+						 UserRepository userRepository) {
 		this.basketRepository = basketRepository;
 		this.productRepository = productRepository;
 		this.promotionRepository = promotionRepository;
+		this.userRepository = userRepository;
 	}
 
-	public BasketDTO createBasket() {
-		 Basket createdBasket = basketRepository.save(new Basket());
+	public BasketDTO createBasket(Long userId) {
+		Optional<Basket> existingBasket = basketRepository.findByUserId(userId);
+		if (existingBasket.isPresent()) {
+			throw new IllegalStateException("User already has a basket assigned");
+		}
 
-		 return BasketDTO.fromEntity(createdBasket);
+		User user = userRepository.findById(userId)
+			.orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+		Basket basket = new Basket();
+		basket.setUser(user);
+
+		Basket createdBasket = basketRepository.save(basket);
+
+		return BasketDTO.fromEntity(createdBasket);
 	}
 
 	public BasketDTO getBasketById(Long id) {
 		return BasketDTO.fromEntity(basketRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Basket not found")));
+			.orElseThrow(() -> new ResourceNotFoundException("Basket not found")));
 	}
 
 	public List<BasketDTO> getAllBaskets() {
@@ -46,7 +66,7 @@ public class BasketService {
 
 	public BasketDTO updateBasket(Long id, List<Long> productIds) {
 		Basket basket = basketRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Basket not found"));
+			.orElseThrow(() -> new ResourceNotFoundException("Basket not found"));
 
 		List<Product> products = productRepository.findAllById(productIds);
 
@@ -61,13 +81,14 @@ public class BasketService {
 
 	public void deleteBasket(Long id) {
 		Basket basket = basketRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Basket not found"));
+			.orElseThrow(() -> new ResourceNotFoundException("Basket not found"));
+
 		basketRepository.delete(basket);
 	}
 
 	public BigDecimal calculateBasketValue(Long basketId) {
 		Basket basket = basketRepository.findById(basketId)
-				.orElseThrow(() -> new RuntimeException("Basket not found"));
+			.orElseThrow(() -> new RuntimeException("Basket not found"));
 
 		BigDecimal totalValue = basket.getProducts().stream()
 			.map(product -> product.getPrice().multiply(BigDecimal.valueOf(product.getQuantity())))

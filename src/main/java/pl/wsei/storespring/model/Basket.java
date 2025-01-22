@@ -16,6 +16,10 @@ public class Basket {
 	@OneToMany(mappedBy = "basket", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Product> products = new ArrayList<>();
 
+	@OneToOne
+	@JoinColumn(name = "user_id", referencedColumnName = "id", unique = true)
+	private User user;
+
 	public long getId() {
 		return id;
 	}
@@ -31,4 +35,13 @@ public class Basket {
 	public void setProducts(List<Product> products) {
 		this.products = products;
 	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
 }
